@@ -81,4 +81,56 @@ module.exports = {
         });
     },
 
+    /**
+     * paketnikController.update()
+     */
+    //primer updejtaa
+    //http://localhost:3000/paketnik/posodobi?id=1&ulica=krEnaUlica&hisnaStevilka=9&mesto=krEno
+
+    update: function (req, res) {
+        var reqId = req.query.id;
+
+        PaketnikModel.findOne({ id: reqId }, function (err, paketnik) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting question',
+                    error: err
+                });
+            }
+
+            if (!paketnik) {
+                return res.redirect();
+            } else {
+                PaketnikModel.findOne({ id: reqId }, function (err, paketnik) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when getting paketniks',
+                            error: err
+                        });
+                    }
+
+                    if (!paketnik) {
+                        return res.status(404).json({
+                            message: 'No such paketniks'
+                        });
+                    }
+
+                    paketnik.ulica = req.query.ulica ? req.query.ulica : paketnik.ulica;
+                    paketnik.hisnaStevilka = req.query.hisnaStevilka ? req.query.hisnaStevilka : paketnik.hisnaStevilka;
+                    paketnik.postnaStevilka = req.query.postnaStevilka ? req.query.postnaStevilka : paketnik.postnaStevilka;
+                    paketnik.mesto = req.query.mesto ? req.query.mesto : paketnik.mesto;
+
+                    paketnik.save(function (err, paketnik) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when updating paketnik.',
+                                error: err
+                            });
+                        }
+
+                        return res.redirect('/paketnik/');
+                    });
+                });
+            }
+        });
 };

@@ -7,6 +7,8 @@ var userController = require('../controllers/userController.js');
  */
 router.get('/', userController.list);
 router.get('/logout', userController.logout);
+router.get('/profile', userController.profile);
+router.get('/posodobi', userController.update);
 
 /*
  * GET
