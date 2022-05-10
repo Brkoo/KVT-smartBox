@@ -19,6 +19,7 @@ function requiresLogin(req,res,next){
  */
 router.get('/', paketnikController.list);
 router.get('/dodaj', paketnikController.dodaj);
+router.get('/izbrisi', paketnikController.remove);
 router.get('/posodobi', paketnikController.update);
 
 /*

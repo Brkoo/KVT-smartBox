@@ -124,12 +124,10 @@ module.exports = {
     },
 
 
-    //primer za updejt usera
-    // http://localhost:3000/users/posodobi?id=627aa46ade32077241801663&name=posodobljeno&surname=pos&email=pos&password=pos&phoneNumber=123
     update: function (req, res) {
         var reqId = req.query.id;
 
-        UserModel.findOne({ _id: reqId }, function (err, user) {
+        UserModel.findOne({_id:reqId}, function (err, user) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting user',
@@ -166,4 +164,19 @@ module.exports = {
      * userController.remove()
      */
 
+
+    remove: function (req, res) {
+        var id = req.query.id;
+
+        UserModel.findByIdAndRemove({_id:id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when deleting the user.',
+                    error: err
+                });
+            }
+
+            return res.status(204).json();
+        });
+    }
 };

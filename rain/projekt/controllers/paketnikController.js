@@ -65,8 +65,8 @@ module.exports = {
             hisnaStevilka : req.body.hisnaStevilka,
             postnaStevilka : req.body.postnaStevilka,
             mesto : req.body.mesto,
-			userId : req.body.userId,
-			addressId : req.body.addressId
+            userId : req.body.userId,
+            addressId : req.body.addressId
         });
 
         paketnik.save(function (err, paketnik) {
@@ -84,13 +84,49 @@ module.exports = {
     /**
      * paketnikController.update()
      */
+    /*
+    update: function (req, res) {
+        var id = req.params.id;
+
+        PaketnikModel.findOne({_id: id}, function (err, paketnik) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting paketnik',
+                    error: err
+                });
+            }
+
+            if (!paketnik) {
+                return res.status(404).json({
+                    message: 'No such paketnik'
+                });
+            }
+
+            paketnik.userId = req.body.userId ? req.body.userId : paketnik.userId;
+			paketnik.addressId = req.body.addressId ? req.body.addressId : paketnik.addressId;
+
+            paketnik.save(function (err, paketnik) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating paketnik.',
+                        error: err
+                    });
+                }
+
+                return res.json(paketnik);
+            });
+        });
+    },*/
+
+
+
     //primer updejtaa
     //http://localhost:3000/paketnik/posodobi?id=1&ulica=krEnaUlica&hisnaStevilka=9&mesto=krEno
 
     update: function (req, res) {
         var reqId = req.query.id;
 
-        PaketnikModel.findOne({ id: reqId }, function (err, paketnik) {
+        PaketnikModel.findOne({id:reqId}, function (err, paketnik) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting question',
@@ -101,7 +137,7 @@ module.exports = {
             if (!paketnik) {
                 return res.redirect();
             } else {
-                PaketnikModel.findOne({ id: reqId }, function (err, paketnik) {
+                PaketnikModel.findOne({id:reqId}, function (err, paketnik) {
                     if (err) {
                         return res.status(500).json({
                             message: 'Error when getting paketniks',
@@ -133,4 +169,25 @@ module.exports = {
                 });
             }
         });
+    },
+
+    /**
+     * paketnikController.remove()
+     */
+    remove: function (req, res) {
+        //primer urlja:
+        //http://localhost:3000/paketnik/izbrisi?id=1
+        var iskanId = req.query.id;
+
+        PaketnikModel.findOneAndDelete({id:iskanId}, function (err, paketnik) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when deleting the paketnik.',
+                    error: err
+                });
+            }
+
+            return res.status(204).json();
+        });
+    }
 };
