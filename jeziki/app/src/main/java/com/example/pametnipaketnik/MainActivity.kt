@@ -9,13 +9,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.pametnipaketnik.model.Post
-import com.example.pametnipaketnik.repository.Repository
+import com.example.MainViewModel
+import com.example.MainViewModelFactory
+import com.example.model.Post
+import com.example.repository.Repository
 import com.google.zxing.integration.android.IntentIntegrator
 import org.json.JSONException
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewModel: MainViewModel
     lateinit var buttonScan: Button
     lateinit var textViewAddress: TextView
     lateinit var textViewName: TextView
@@ -33,6 +36,26 @@ class MainActivity : AppCompatActivity() {
         buttonScan.setOnClickListener {
             qrScan.initiateScan()
         }
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        val myPost = Post(0,541,2,0.0,0.0,"string", true, 0)
+        viewModel.pushPost(myPost)
+        viewModel.myResponse.observe(this, Observer { response ->
+            if(response.isSuccessful){
+                Log.d("Main", response.body().toString())
+                Log.d("Main", response.code().toString())
+                Log.d("Main", response.message())
+            }else{
+                Toast.makeText(this, response.code().toString(), Toast.LENGTH_SHORT).show()
+                Log.d("Main", response.code().toString())
+            }
+        })
+
+
+
+
+
     }
 	
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

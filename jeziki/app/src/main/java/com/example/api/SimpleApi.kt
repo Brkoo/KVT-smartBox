@@ -1,7 +1,7 @@
-package com.example.aplikacijazaprojekt.api
+package com.example.api
 
 import com.example.model.Post
-import com.example.utils.constans.Companion.API_KEY
+import com.example.utils.Constans.Companion.API_KEY
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers

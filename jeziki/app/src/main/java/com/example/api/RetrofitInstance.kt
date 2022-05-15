@@ -1,7 +1,7 @@
-package com.example.aplikacijazaprojekt.api
+package com.example.api
 
-import com.example.aplikacijazaprojekt.utils.constans.Companion.API_KEY
-import com.example.aplikacijazaprojekt.utils.constans.Companion.BASE_URL
+import com.example.utils.Constans.Companion.API_KEY
+import com.example.utils.Constans.Companion.BASE_URL
 
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.AbstractMap
@@ -28,7 +28,7 @@ object RetrofitInstance {
         }
     }
     val client =  OkHttpClient.Builder()
-        .addInterceptor(OAuthInterceptor("Bearer", "timotejspremeni"))
+        .addInterceptor(OAuthInterceptor("Bearer", API_KEY))
         .build()
 
 
@@ -46,7 +46,7 @@ object RetrofitInstance {
     private val retrofit by lazy {
         Retrofit.Builder()
             .client(client)
-            .baseUrl("timotejspremeni")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

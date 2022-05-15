@@ -1,4 +1,4 @@
-package com.example.aplikacijazaprojekt.model
+package com.example.model
 
 data class Post (
     val deliveryId: Int,
