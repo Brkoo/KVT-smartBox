@@ -83,6 +83,38 @@ module.exports = {
         });
     },
 
+    checkAccess: function (req, res) {
+        //funkcija preveri, ce lahko uporabnik odklene paketnik
+        var iden = req.query.iden;
+        var uporabnik = req.query.uporabnik;
+
+        PaketnikModel.findOne({id: iden}, function (err, paketniks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting paketniks',
+                    error: err
+                });
+            }
+
+            if (!paketniks) {
+                return res.status(404).json({
+                    message: 'No such paketniks'
+                });
+            }
+
+            if(paketniks.users.includes(uporabnik)){
+                return res.status(200).json({
+                    message: 'ODKLEP ODOBREN'
+                });
+            }
+            else {
+                return res.status(401).json({
+                    message: 'ODKLEP ZAVRNJEN'
+                });
+            }
+        });
+    },
+
     addUsers: function (req, res) {
         var iden = req.body.iden;
         var uporabnik = req.body.uporabnik;

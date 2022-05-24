@@ -21,6 +21,7 @@ router.get('/izbrisi', paketnikController.remove);
 router.get('/posodobi', paketnikController.update);
 router.get('/prikaziEnega', paketnikController.show);
 router.get('/brisiUser', paketnikController.deleteUsers);
+router.get('/preveriDostop', paketnikController.checkAccess);
 //tale mora biti pod vsemi ostalimi GETi
 router.get('/:id', paketnikController.show);
 /*
