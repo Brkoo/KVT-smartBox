@@ -42,6 +42,7 @@ function App() {
                             <Nav.Link as={Link} to="/paketnikDodaj">Dodaj paketnik</Nav.Link>
                             <Nav.Link as={Link} to="/odklepi">Zgodovina odklepov</Nav.Link>
                             <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                            <Nav.Link as={Link} to="/dodajUser">Dodaj pooblastilo</Nav.Link>
 
                         </Nav>
                         <Nav>

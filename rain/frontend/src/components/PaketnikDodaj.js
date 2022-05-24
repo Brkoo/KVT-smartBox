@@ -41,64 +41,64 @@ function PaketnikDodaj() {
     }
 
     return(
-        <>
-            <form onSubmit={Paketnik}>
-                <h3>Dodaj paketnik</h3>
-                <div>
-                    <label>ID paketnika</label>
-                    <input type="text"
-                           name="id"
-                           className="m-3"
-                           placeholder="Enter ID"
-                           value={id}
-                           onChange={(e)=>(setId(e.target.value))}/>
-                </div>
-                <div>
-                    <label>Street</label>
-                    <input type="text"
-                           name="ulica"
-                           className="m-3"
-                           placeholder="Enter street"
-                           onChange={(e)=>(setUlica(e.target.value))}/>
-                </div>
-                <div>
-                    <label>House number</label>
-                    <input type="text"
-                           name="hisnaStevilka"
-                           className="m-3"
-                           placeholder="Enter house number"
-                           onChange={(e)=>(setHisnaStevilka(e.target.value))}/>
-                </div>
-                <div>
-                    <label>Post code</label>
-                    <input type="text"
-                           name="postnaStevilka"
-                           className="m-3"
-                           placeholder="Enter post code"
-                           onChange={(e)=>(setPostnaStevilka(e.target.value))}/>
-                </div>
-                <div>
-                    <label>City</label>
-                    <input type="text"
-                           name="mesto"
-                           className="m-3"
-                           placeholder="Enter city"
-                           onChange={(e)=>(setMesto(e.target.value))}/>
-                </div>
+    <>
+        <form onSubmit={Paketnik}>
+            <h3>Dodaj paketnik</h3>
+            <div>
+                <label>ID paketnika</label>
+                <input type="text"
+                       name="id"
+                       className="m-3"
+                       placeholder="Enter ID"
+                       value={id}
+                       onChange={(e)=>(setId(e.target.value))}/>
+            </div>
+            <div>
+                <label>Street</label>
+                <input type="text"
+                       name="ulica"
+                       className="m-3"
+                       placeholder="Enter street"
+                       onChange={(e)=>(setUlica(e.target.value))}/>
+            </div>
+            <div>
+                <label>House number</label>
+                <input type="text"
+                       name="hisnaStevilka"
+                       className="m-3"
+                       placeholder="Enter house number"
+                       onChange={(e)=>(setHisnaStevilka(e.target.value))}/>
+            </div>
+            <div>
+                <label>Post code</label>
+                <input type="text"
+                       name="postnaStevilka"
+                       className="m-3"
+                       placeholder="Enter post code"
+                       onChange={(e)=>(setPostnaStevilka(e.target.value))}/>
+            </div>
+            <div>
+                <label>City</label>
+                <input type="text"
+                       name="mesto"
+                       className="m-3"
+                       placeholder="Enter city"
+                       onChange={(e)=>(setMesto(e.target.value))}/>
+            </div>
 
-                <div>
-                    <label>{error}</label>
-                </div>
+            <div>
+                <label>{error}</label>
+            </div>
 
-                <div className="mt-1">
-                    <button type="submit"
-                            name="submit"
-                            className="btn btn-dark">Create</button>
-                </div>
+            <div className="mt-1">
+                <button type="submit"
+                        name="submit"
+                        className="btn btn-dark">Create</button>
+            </div>
 
-            </form>
+        </form>
 
-        </>
+    </>
     );
 }
 

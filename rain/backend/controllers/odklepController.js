@@ -70,16 +70,16 @@ module.exports = {
         });
 
         //if(req.session.userId===userId) {
-        odklep.save(function (err, odklep) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating odklep',
-                    error: err
-                });
-            }
+            odklep.save(function (err, odklep) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating odklep',
+                        error: err
+                    });
+                }
 
-            return res.status(201).json(odklep);
-        });
+                return res.status(201).json(odklep);
+            });
         //}
         /*else{
             return res.status(404).json({
@@ -110,10 +110,10 @@ module.exports = {
             }
 
             odklep.userId = req.body.userId ? req.body.userId : odklep.userId;
-            odklep.paketnikId = req.body.paketnikId ? req.body.paketnikId : odklep.paketnikId;
-            odklep.steviloOdklepov = req.body.steviloOdklepov ? req.body.steviloOdklepov : odklep.steviloOdklepov;
-            odklep.datum = req.body.datum ? req.body.datum : odklep.datum;
-
+			odklep.paketnikId = req.body.paketnikId ? req.body.paketnikId : odklep.paketnikId;
+			odklep.steviloOdklepov = req.body.steviloOdklepov ? req.body.steviloOdklepov : odklep.steviloOdklepov;
+			odklep.datum = req.body.datum ? req.body.datum : odklep.datum;
+			
             odklep.save(function (err, odklep) {
                 if (err) {
                     return res.status(500).json({
