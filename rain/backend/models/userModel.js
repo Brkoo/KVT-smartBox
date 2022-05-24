@@ -7,9 +7,9 @@ var userSchema = new Schema({
 	'name' : String,
 	'surname' : String,
 	'email' : String,
+	'username' : String,
 	'password' : String,
-	'phoneNumber' : String,
-	'owner' : Boolean
+	'phoneNumber' : String
 });
 
 userSchema.statics.authenticate = function(username, password, callback){

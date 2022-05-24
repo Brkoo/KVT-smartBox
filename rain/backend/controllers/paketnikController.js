@@ -1,4 +1,5 @@
 var PaketnikModel = require('../models/paketnikModel.js');
+const Console = require("console");
 
 /**
  * paketnikController.js
@@ -13,7 +14,9 @@ module.exports = {
 
     //izpiše vse paketnike
     list: function (req, res) {
-        PaketnikModel.find(function (err, paketniks) {
+        var id = req.session.userId;
+
+        PaketnikModel.find({ownerId: id}, function (err, paketniks) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting paketnik.',
@@ -65,8 +68,8 @@ module.exports = {
             hisnaStevilka : req.body.hisnaStevilka,
             postnaStevilka : req.body.postnaStevilka,
             mesto : req.body.mesto,
-            userId : req.body.userId,
-            addressId : req.body.addressId
+            ownerId : req.session.userId,
+            users : []
         });
 
         paketnik.save(function (err, paketnik) {
@@ -76,8 +79,104 @@ module.exports = {
                     error: err
                 });
             }
-
             return res.status(201).json(paketnik);
+        });
+    },
+
+    checkAccess: function (req, res) {
+        //funkcija preveri, ce lahko uporabnik odklene paketnik
+        var iden = req.query.iden;
+        var uporabnik = req.query.uporabnik;
+
+        PaketnikModel.findOne({id: iden}, function (err, paketniks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting paketniks',
+                    error: err
+                });
+            }
+
+            if (!paketniks) {
+                return res.status(404).json({
+                    message: 'No such paketniks'
+                });
+            }
+
+            if(paketniks.users.includes(uporabnik)){
+                return res.status(200).json({
+                    message: 'ODKLEP ODOBREN'
+                });
+            }
+            else {
+                return res.status(401).json({
+                    message: 'ODKLEP ZAVRNJEN'
+                });
+            }
+        });
+    },
+
+    addUsers: function (req, res) {
+        var iden = req.body.iden;
+        var uporabnik = req.body.uporabnik;
+        PaketnikModel.findOne({id: iden}, function (err, paketniks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting paketniks',
+                    error: err
+                });
+            }
+
+            if (!paketniks) {
+                console.log("No such oaketniks");
+                return res.status(404).json({
+                    message: 'No such paketniks'
+                });
+            }
+
+            paketniks.users.addToSet(uporabnik);
+            paketniks.save(function (err, answers) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating paketniks.',
+                        error: err
+                    });
+                }
+
+                return res.redirect('/paketnik');
+            });
+        });
+    },
+
+    deleteUsers: function (req, res) {
+        var iden = req.query.iden;
+        var uporabnik = req.query.uporabnik;
+
+        PaketnikModel.findOne({id: iden}, function (err, paketniks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting paketniks',
+                    error: err
+                });
+            }
+
+            if (!paketniks) {
+                return res.status(404).json({
+                    message: 'No such paketniks'
+                });
+            }
+
+            paketniks.users.pull(uporabnik);
+
+            paketniks.save(function (err, answers) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating paketniks.',
+                        error: err
+                    });
+                }
+
+                return res.redirect('/paketnik');
+            });
         });
     },
 
@@ -104,7 +203,7 @@ module.exports = {
 
             paketnik.userId = req.body.userId ? req.body.userId : paketnik.userId;
 			paketnik.addressId = req.body.addressId ? req.body.addressId : paketnik.addressId;
-
+			
             paketnik.save(function (err, paketnik) {
                 if (err) {
                     return res.status(500).json({
@@ -151,6 +250,7 @@ module.exports = {
                         });
                     }
 
+                    paketnik.id = req.query.id ? req.query.id : paketnik.id
                     paketnik.ulica = req.query.ulica ? req.query.ulica : paketnik.ulica;
                     paketnik.hisnaStevilka = req.query.hisnaStevilka ? req.query.hisnaStevilka : paketnik.hisnaStevilka;
                     paketnik.postnaStevilka = req.query.postnaStevilka ? req.query.postnaStevilka : paketnik.postnaStevilka;
