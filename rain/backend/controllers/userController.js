@@ -1,6 +1,7 @@
 var UserModel = require('../models/userModel.js');
 const PaketnikModel = require("../models/paketnikModel");
-
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 /**
  * userController.js
  *
@@ -76,6 +77,15 @@ module.exports = {
                 //  return res.json(user);
             }
         });
+    },
+
+    
+    faceLogin: function (req, res, next) {
+        const tmpPath = req.file.path;
+        console.log("nekaj", req.file)
+        
+        //let userPicture = req.file.image;
+        return res.status(200).json({});
     },
 
     profile: function(req, res, next){
