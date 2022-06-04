@@ -1,8 +1,12 @@
 package com.example.userLogin
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +21,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -98,9 +105,52 @@ class LoginActivity : AppCompatActivity() {
         }).start()
 
     }
+    var currentPhotoPath : String = ""
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+
+            currentPhotoPath = absolutePath
+            Log.d("Main", "Pot: " + currentPhotoPath)
+            galleryAddPic()
+        }
+    }
+    private fun galleryAddPic() {
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+            val f = File(currentPhotoPath)
+            mediaScanIntent.data = Uri.fromFile(f)
+            sendBroadcast(mediaScanIntent)
+        }
+    }
+
     fun showToast(toast: String?) {
         runOnUiThread {
             Toast.makeText(this, toast, Toast.LENGTH_SHORT).show()
+        }
+    }
+    fun getMimeType(file: File): String? {
+        var type: String? = null
+        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+        }
+        return type
+    }
+
+    fun toggleProgressDialog(show: Boolean) {
+        activity.runOnUiThread {
+            if (show) {
+                dialog = ProgressDialog.show(activity, "", "Uploading file...", true);
+            } else {
+                dialog?.dismiss();
+            }
         }
     }
 }

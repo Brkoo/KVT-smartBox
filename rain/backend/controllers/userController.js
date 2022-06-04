@@ -2,6 +2,7 @@ var UserModel = require('../models/userModel.js');
 const PaketnikModel = require("../models/paketnikModel");
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
+const PythonShell = require('python-shell').PythonShell;
 /**
  * userController.js
  *
@@ -79,36 +80,25 @@ module.exports = {
         });
     },
 
- uporabniski-portal
     
     faceLogin: function (req, res, next) {
-        const tmpPath = req.file.path;
-        console.log("nekaj", req.file)
+        var options = {
+            mode: 'text',
+            pythonPath: 'path/to/python',
+            pythonOptions: ['-u'],
+            scriptPath: 'path/to/my/scripts',
+            args: ['value1', 'value2', 'value3']
+          };
+          
+          PythonShell.run('my_script.py', options, function (err, results) {
+            if (err) 
+              throw err;
+            // Results is an array consisting of messages collected during execution
+            console.log('results: %j', results);
+          });
         
         //let userPicture = req.file.image;
         return res.status(200).json({});
-
-    login2: function(req, res, next){
-        UserModel.authenticate(req.body.username, req.body.password, function(error, user){
-            if(error || !user){
-                var err = new Error("Wrong username or password");
-                err.status = 401;
-                console.log("Neuspesen login");
-                return next(err);
-            } else{
-                req.session.userId = user._id;
-                //return res.redirect('profile');
-                console.log("Uspešen login");
-
-                console.log(req.session.userId);
-                return res.status(200).json({
-                    message: 'loginano',
-                });
-                //return res.redirect('profile');
-                //  return res.json(user);
-            }
-        });
- main
     },
 
     profile: function(req, res, next){
