@@ -1,6 +1,7 @@
 var UserModel = require('../models/userModel.js');
 const PaketnikModel = require("../models/paketnikModel");
-
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 /**
  * userController.js
  *
@@ -78,6 +79,15 @@ module.exports = {
         });
     },
 
+ uporabniski-portal
+    
+    faceLogin: function (req, res, next) {
+        const tmpPath = req.file.path;
+        console.log("nekaj", req.file)
+        
+        //let userPicture = req.file.image;
+        return res.status(200).json({});
+
     login2: function(req, res, next){
         UserModel.authenticate(req.body.username, req.body.password, function(error, user){
             if(error || !user){
@@ -98,6 +108,7 @@ module.exports = {
                 //  return res.json(user);
             }
         });
+ main
     },
 
     profile: function(req, res, next){

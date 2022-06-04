@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 var mongoose = require('mongoose')
 // var mongoDB = 'mongodb://127.0.0.1/projekt';
@@ -81,4 +83,32 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+
+const storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, '/src/my-images');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname);
+  }
+});
+
+app.post('/sendFile', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    console.log("No file received");
+    return res.send({
+      success: false
+    });
+
+  } else {
+    console.log('file received');
+    return res.send({
+      success: true
+    })
+  }
+});
+
+
 module.exports = app;
+
