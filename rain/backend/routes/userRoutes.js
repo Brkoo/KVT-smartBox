@@ -38,6 +38,7 @@ router.get('/:id', userController.show);
  */
 router.post('/', userController.create);
 router.post('/login', userController.login);
+router.post('/login2', userController.login2);
 //router.post('/login/login', userController.login2);
 router.post('/register', userController.create);
 router.post('/faceLogin', upload.single('image'), userController.faceLogin);

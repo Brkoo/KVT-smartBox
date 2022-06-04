@@ -79,6 +79,7 @@ module.exports = {
         });
     },
 
+ uporabniski-portal
     
     faceLogin: function (req, res, next) {
         const tmpPath = req.file.path;
@@ -86,6 +87,28 @@ module.exports = {
         
         //let userPicture = req.file.image;
         return res.status(200).json({});
+
+    login2: function(req, res, next){
+        UserModel.authenticate(req.body.username, req.body.password, function(error, user){
+            if(error || !user){
+                var err = new Error("Wrong username or password");
+                err.status = 401;
+                console.log("Neuspesen login");
+                return next(err);
+            } else{
+                req.session.userId = user._id;
+                //return res.redirect('profile');
+                console.log("Uspešen login");
+
+                console.log(req.session.userId);
+                return res.status(200).json({
+                    message: 'loginano',
+                });
+                //return res.redirect('profile');
+                //  return res.json(user);
+            }
+        });
+ main
     },
 
     profile: function(req, res, next){
