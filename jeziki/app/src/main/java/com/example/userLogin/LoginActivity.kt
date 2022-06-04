@@ -129,6 +129,62 @@ class LoginActivity : AppCompatActivity() {
             sendBroadcast(mediaScanIntent)
         }
     }
+	
+	//zajem slike
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+
+                    showToast("Error occurred while creating file")
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.android.fileprovider",
+                        it
+                    )
+                    Log.d("Main", "pot pri tistemu: " + photoURI.toString())
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }
+    }
+	
+	//intent vrne sliko polovimo z onActivityResult
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //imageUri = intent.getData()!!
+            //moram ven pobrat uri od slike:
+            //val bitmap: Bitmap
+            try {
+                //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                //imageFace = findViewById(R.id.img_viewer_face)
+                //imageFace.setImageBitmap(bitmap)
+                uploadFile(currentPhotoPath)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace();
+            } catch (e: IOException) {
+                e.printStackTrace();
+            }
+
+        }
+            //imageUri = data?.extras?.get(MediaStore.EXTRA_OUTPUT) as Uri
+            //Log.d("Main", "Uri od slike je: " + imageUri)
+
+            //imageBitmap = data?.extras?.get("data") as Bitmap
+
+            //val faceLogin = faceLogin()
+            //faceLogin.faceLogin(imageBitmap, this)
+        }
 
     fun showToast(toast: String?) {
         runOnUiThread {
