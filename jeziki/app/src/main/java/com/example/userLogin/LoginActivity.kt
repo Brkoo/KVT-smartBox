@@ -209,4 +209,49 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun uploadFile(sourceFilePath: String, uploadedFileName: String? = null) {
+        uploadFile(File(sourceFilePath), uploadedFileName)
+    }
+
+    fun uploadFile(sourceFile: File, uploadedFileName: String? = null) {
+        Thread {
+            val client = OkHttpClient()
+            val mimeType = getMimeType(sourceFile);
+            if (mimeType == null) {
+                Log.e("file error", "Not able to get mime type")
+                return@Thread
+            }
+            val fileName: String = if (uploadedFileName == null)  sourceFile.name else uploadedFileName
+            toggleProgressDialog(true)
+            try {
+                val requestBody: RequestBody =
+                    MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("image", fileName,sourceFile.asRequestBody(mimeType.toMediaTypeOrNull()))
+                        .build()
+
+                val request: Request = Request.Builder()
+                    .url(BASE_URL_FACE_LOGIN)
+                    .post(requestBody)
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    Log.d("Main", response.message)
+                    if (response.isSuccessful) {
+                        Log.d("File upload","success, path: $serverUploadDirectoryPath$fileName")
+                        showToast("File uploaded successfully at $serverUploadDirectoryPath$fileName")
+                    } else {
+                        Log.e("File upload", "failed")
+                        showToast("File uploading failed")
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                Log.e("File upload", "failed")
+                showToast("File uploading failed")
+            }
+            toggleProgressDialog(false)
+        }.start()
+    }
 }
