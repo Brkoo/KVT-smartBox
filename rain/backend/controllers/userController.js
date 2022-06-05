@@ -2,7 +2,7 @@ var UserModel = require('../models/userModel.js');
 const PaketnikModel = require("../models/paketnikModel");
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
-const PythonShell = require('python-shell').PythonShell;
+//const PythonShell = require('python-shell').PythonShell;
 /**
  * userController.js
  *
@@ -79,26 +79,49 @@ module.exports = {
             }
         });
     },
+    login2: function(req, res, next){
+        UserModel.authenticate(req.body.username, req.body.password, function(error, user){
+            if(error || !user){
+                var err = new Error("Wrong username or password");
+                err.status = 401;
+                console.log("Neuspesen login");
+                return next(err);
+            } else{
+                req.session.userId = user._id;
+                //return res.redirect('profile');
+                console.log("Uspešen login");
+
+                console.log(req.session.userId);
+                /*return res.status(200).json({
+                    message: 'loginano',
+                });*/
+                //return res.redirect('profile');
+                return res.json(user);
+            }
+        });
+    },
 
     
     faceLogin: function (req, res, next) {
-        var options = {
-            mode: 'text',
-            pythonPath: 'path/to/python',
-            pythonOptions: ['-u'],
-            scriptPath: 'path/to/my/scripts',
-            args: ['value1', 'value2', 'value3']
-          };
-          
-          PythonShell.run('my_script.py', options, function (err, results) {
-            if (err) 
-              throw err;
-            // Results is an array consisting of messages collected during execution
-            console.log('results: %j', results);
-          });
+        //potrebujemo kodo ki bo prebrala datoteko in vrnila username pa password
+        var id = 'e'
+        UserModel.findOne({'username': new RegExp(id, 'i')}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+
+            return res.json(user);
+        });
         
-        //let userPicture = req.file.image;
-        return res.status(200).json({});
     },
 
     profile: function(req, res, next){

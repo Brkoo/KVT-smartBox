@@ -6,7 +6,7 @@ var router = express.Router();
 var userController = require('../controllers/userController.js');
 const storage = multer.diskStorage({
     destination: function(req, file, callback) {
-      callback(null, 'Images');
+      callback(null, 'python/images');
     },
     filename: function (req, file, callback) {
       console.log(file);

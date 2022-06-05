@@ -86,6 +86,7 @@ module.exports = {
     checkAccess: function (req, res) {
         //funkcija preveri, ce lahko uporabnik odklene paketnik
         var iden = req.query.iden;
+        console.log(iden)
         var uporabnik = req.query.uporabnik;
 
         PaketnikModel.findOne({id: iden}, function (err, paketniks) {
