@@ -104,11 +104,13 @@ module.exports = {
             }
 
             if(paketniks.users.includes(uporabnik)){
+                console.log("Odklep odobren.")
                 return res.status(200).json({
                     message: 'ODKLEP ODOBREN'
                 });
             }
             else {
+                console.log("Nimate dostopa do tega paketnika.")
                 return res.status(401).json({
                     message: 'ODKLEP ZAVRNJEN'
                 });

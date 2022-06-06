@@ -16,6 +16,19 @@ const storage = multer.diskStorage({
   });
   
   const upload = multer({storage: storage})
+
+const storage2 = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, 'python/aleks');
+    },
+    filename: function (req, file, callback) {
+        console.log(file);
+        callback(null,Date.now() + path.extname(file.originalname) );
+
+    }
+});
+
+const upload2 = multer({storage: storage2})
 /*
  * GET
  */
@@ -42,6 +55,7 @@ router.post('/login2', userController.login2);
 //router.post('/login/login', userController.login2);
 router.post('/register', userController.create);
 router.post('/faceLogin', upload.single('image'), userController.faceLogin);
+router.post('/faceRegister', upload2.single('image'), userController.create);
 
 /*
  * PUT
