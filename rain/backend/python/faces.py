@@ -58,3 +58,32 @@ def treniranje():
 
 			global threadZakljucil
 			threadZakljucil=True
+
+
+
+
+treningThread = Thread(target=treniranje)
+treningThread.start()
+while True:
+	if(threadZakljucil==True):
+		break
+	# pocakaj, da se naredijo prvi podatki ob zagoni skripte
+
+face_cascade=cv2.CascadeClassifier('cascades/data/haarcascade_frontalface_alt2.xml')
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer.read("trainer.yml")
+labels={"person_name":1}
+with open("labels.pickle", 'rb') as f:
+	og_labels=pickle.load(f)
+	labels={v:k for k,v in og_labels.items()}
+
+while True:
+	if(threadZakljucil==True):
+		print("NALAGANJE NOVEGA trainer.yml")
+		recognizer = cv2.face.LBPHFaceRecognizer_create()
+		recognizer.read("trainer.yml")
+		labels={"person_name":1}
+		with open("labels.pickle", 'rb') as f:
+			og_labels=pickle.load(f)
+			labels={v:k for k,v in og_labels.items()}
+		threadZakljucil=False
