@@ -86,6 +86,7 @@ module.exports = {
     checkAccess: function (req, res) {
         //funkcija preveri, ce lahko uporabnik odklene paketnik
         var iden = req.query.iden;
+        console.log(iden)
         var uporabnik = req.query.uporabnik;
 
         PaketnikModel.findOne({id: iden}, function (err, paketniks) {
@@ -103,11 +104,13 @@ module.exports = {
             }
 
             if(paketniks.users.includes(uporabnik)){
+                console.log("Odklep odobren.")
                 return res.status(200).json({
                     message: 'ODKLEP ODOBREN'
                 });
             }
             else {
+                console.log("Nimate dostopa do tega paketnika.")
                 return res.status(401).json({
                     message: 'ODKLEP ZAVRNJEN'
                 });

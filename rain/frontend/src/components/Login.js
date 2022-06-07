@@ -75,7 +75,6 @@ function Login(){
 
     return (
             <>
-                <h3 className="loginNaslov"> Login</h3>
                 <div className="App">
                     <div className="container">
                         <div className="row d-flex justify-content-center">

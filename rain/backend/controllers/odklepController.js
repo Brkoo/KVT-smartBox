@@ -1,6 +1,9 @@
 var OdklepModel = require('../models/odklepModel.js');
 const PaketnikModel = require("../models/paketnikModel");
 const UserModel = require("../models/userModel");
+var bodyParser = require('body-parser');
+var multer = require('multer');
+var forms = multer();
 
 /**
  * odklepController.js
@@ -89,6 +92,9 @@ module.exports = {
         }*/
     },
 
+
+
+    
     /**
      * odklepController.update()
      */

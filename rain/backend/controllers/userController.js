@@ -2,6 +2,9 @@ var UserModel = require('../models/userModel.js');
 const PaketnikModel = require("../models/paketnikModel");
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
+var fs = require('fs');
+const readLastLines = require("read-last-lines");
+//const PythonShell = require('python-shell').PythonShell;
 /**
  * userController.js
  *
@@ -69,7 +72,7 @@ module.exports = {
                 //return res.redirect('profile');
                 console.log("Uspešen login");
 
-                console.log(req.session.userId);
+                //console.log(req.session.userId);
                 /*return res.status(200).json({
                     message: 'loginano',
                 });*/
@@ -78,16 +81,6 @@ module.exports = {
             }
         });
     },
-
- uporabniski-portal
-    
-    faceLogin: function (req, res, next) {
-        const tmpPath = req.file.path;
-        console.log("nekaj", req.file)
-        
-        //let userPicture = req.file.image;
-        return res.status(200).json({});
-
     login2: function(req, res, next){
         UserModel.authenticate(req.body.username, req.body.password, function(error, user){
             if(error || !user){
@@ -100,15 +93,74 @@ module.exports = {
                 //return res.redirect('profile');
                 console.log("Uspešen login");
 
-                console.log(req.session.userId);
-                return res.status(200).json({
+                //console.log(req.session.userId);
+                /*return res.status(200).json({
                     message: 'loginano',
-                });
+                });*/
                 //return res.redirect('profile');
-                //  return res.json(user);
+                return res.json(user);
             }
         });
- main
+    },
+
+    
+    faceLogin: async function (req, res, next) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        //potrebujemo kodo ki bo prebrala datoteko in vrnila usernameTxt pa password
+        //const readLastLines = require('read-last-lines');
+
+        /* fs.readFile('python/recognition.txt', 'utf8', (err, data) => {
+             if (err) {
+                 console.error(err);
+                 return;
+             }
+             console.log(data);
+         });*/
+        const readLastLines = require('read-last-lines');
+
+        var username = readLastLines.read('python/recognition.txt', 1);
+
+        username.then(function (username2) {
+            UserModel.findOne({username: username2}, function (err, user) {
+
+
+                console.log(username2)
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting user.',
+                        error: err
+                    });
+                }
+
+                if (!user) {
+                    return res.status(404).json({
+                        message: 'No such user'
+                    });
+                }
+
+                return res.json(user);
+            });
+        })
+
+
+        //var usernameTxt = readLastLines.read('python/recognition.txt', 1);
+
+
+        /*fs.readFile('python/recognition.txt', 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(data);
+        });*/
+
+
+        //console.log(usernameTxt);
+
+
+        //UserModel.findOne({'usernameTxt': new RegExp(usernameTxt, 'i')}, function (err, user) {
+
+
     },
 
     profile: function(req, res, next){
